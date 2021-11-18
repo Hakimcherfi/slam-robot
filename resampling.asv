@@ -1,0 +1,14 @@
+function [x,w] = resampling(xi,wi)
+    Part = size(xi);
+    Part = Part(2);
+    x = zeros(size(xi));
+    w = zeros(size(wi))
+    ci = cumsum(wi);
+    u1 = rand()/Part;
+    for j = 1:Part
+        uj = u1+(j-1)/Part;
+        
+        
+        
+    end
+end
