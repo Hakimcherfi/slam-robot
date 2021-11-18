@@ -3,7 +3,7 @@ close all;
 clc;
 plot_p = 0; %0 pour ne rien afficher, 1 pour voir la simu
 [N,T,Z,F,Hfull,mX0,PX0,Qw,Rv,X] = simulationDonnees(plot_p);
-Part = 2;
+Part = 1000;
 xresamp = 0.5; %entre 0 et 1 (0 : jamais, 1 : toujours) 
 X = zeros(6,Part,N);
 W = zeros(1,Part,N);
