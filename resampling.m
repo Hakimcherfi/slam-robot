@@ -1,7 +1,7 @@
 function [x,w] = resampling(xi,wi)
     Part = size(xi);
     Part = Part(2);
-    x = zeros(size(xi));
+    x = nan(size(xi));
     ci = cumsum(wi);
     u = rand()/Part;
     i = 1;

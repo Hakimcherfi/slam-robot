@@ -1,11 +1,12 @@
-function [x,w] = SIS(x1,w1,z,k)
+function [x,w] = SIS2(x1,w1,z,k)
 % Fonction SIS
 %     Tire de nouveaux échantillons et évalue leurs poids associés, à partir
 %     des échantillons à l'instant précédent, de leurs poids à l'instant précédent
-%     et de la mesure à assimiler. La fonction d'importance est la dynamique
-%     a priori.
+%     et de la mesure à assimiler. La fonction d'importance EST HORS SUJET.
 %     Si l'instant k vaut 0 alors les données en entrée sont ignorées et des
 %     échantillons sont tirés selon la distribution initiale.
+%     Loi d'importance :
+%     
 % Entrée :
 %     x1 : tableau de (6 lignes x "Part" colonnes), correspondant aux échantillons
 %     à l'instant précédent
@@ -27,8 +28,6 @@ function [x,w] = SIS(x1,w1,z,k)
     PX0 = diag([.1 .2 .2 .2 .2 .2]);
     Qw = diag([.05^2 .05^2 (1e-10)^2 (1e-10)^2 (1e-10)^2 (1e-10)^2]);
     Rv = diag([.1^2 .1^2 .1^2 .1^2]);
-    %Qw = diag([.1^2 .1^2 (1e-2)^2 (1e-2)^2 (1e-2)^2 (1e-2)^2]);
-    %Rv = diag([.1^2 .1^2 .1^2 .1^2])*10;
     
     F = blkdiag([cos(w*deltaT) -sin(w*deltaT) ; sin(w*deltaT) cos(w*deltaT)], eye(2), eye(2));
     H1=[-1 0 1 0 0 0 ; 0 -1 0 1 0 0];
@@ -44,15 +43,11 @@ function [x,w] = SIS(x1,w1,z,k)
         end
     else
         for i = 1:Part
-            x(:,i)=F*x1(:,i)+chol(Qw)'*randn(6,1);
             if     ~isnan(z(1,:)) && ~isnan(z(3,:)) %2 amers visibles
-                w(:,i)=w1(:,i)*exp(-0.5*(z-Hfull*x(:,i))'/Rv*(z-Hfull*x(:,i))); % cas 2 amers visibles et importance = dynamique a priori
                 assert(~isnan(w(:,i)));
             elseif ~isnan(z(1,:)) &&  isnan(z(3,:)) %premier amer visible
-                w(:,i)=w1(:,i)*exp(-0.5*(z(1:2,:)-H1*x(:,i))'/(Rv(1:2,1:2))*(z(1:2,:)-H1*x(:,i))); % cas premier amer visible et importance = dynamique a priori
-                assert(~isnan(w(:,i)));
+                 assert(~isnan(w(:,i)));
             elseif  isnan(z(1,:)) && ~isnan(z(3,:))%deuxieme amer visible
-                w(:,i)=w1(:,i)*exp(-0.5*(z(3:4,:)-H2*x(:,i))'/(Rv(3:4,3:4))*(z(3:4,:)-H2*x(:,i))); % cas deuxieme amer visible et importance = dynamique a priori
                 assert(~isnan(w(:,i)));
             else %aucun amer visible
                 w(:,i)=w1(:,i);
