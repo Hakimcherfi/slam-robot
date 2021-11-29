@@ -12,6 +12,8 @@ function plotEllipse(x,xest,pest,xpart,wpart,b)
            hold on;
            scatter(x(2*l-1,k),x(2*l,k),25,'filled');
            hold on;
+           scatter(xest(2*l-1,k),xest(2*l,k),25);
+           hold on
            if b == 1
                wmax = max(wpart(1,:,k));
                for i = 1:Npart

@@ -32,8 +32,8 @@ function [x,w] = SIS(x1,w1,z,k)
     H2=[-1 0 0 0 1 0 ; 0 -1 0 0 0 1];
     H=[H1;H2];
     Hfull=H;
-    x = nan*ones(6,Part);
-    w = zeros(1,Part);
+    x = nan(6,Part);
+    w = nan(1,Part);
     if (k==0)
         for i=1:Part
             x(:,i) = mX0+chol(PX0)'*randn(6,1);
@@ -44,14 +44,18 @@ function [x,w] = SIS(x1,w1,z,k)
             x(:,i)=F*x1(:,i)+chol(Qw)'*randn(6,1);
             if     ~isnan(z(1,:)) && ~isnan(z(3,:)) %2 amers visibles
                 w(:,i)=w1(:,i)*exp(-0.5*(z-Hfull*x(:,i))'*(Rv^(-1))*(z-Hfull*x(:,i))); % cas 2 amers visibles et importance = dynamique a priori
+                assert(~isnan(w(:,i)));
             elseif ~isnan(z(1,:)) &&  isnan(z(3,:)) %premier amer visible
                 w(:,i)=w1(:,i)*exp(-0.5*(z(1:2,:)-H1*x(:,i))'*((Rv(1:2,1:2))^(-1))*(z(1:2,:)-H1*x(:,i))); % cas premier amer visible et importance = dynamique a priori
+                assert(~isnan(w(:,i)));
             elseif  isnan(z(1,:)) && ~isnan(z(3,:))%deuxieme amer visible
                 w(:,i)=w1(:,i)*exp(-0.5*(z(3:4,:)-H2*x(:,i))'*((Rv(3:4,3:4))^(-1))*(z(3:4,:)-H2*x(:,i))); % cas deuxieme amer visible et importance = dynamique a priori
+                assert(~isnan(w(:,i)));
             else %aucun amer visible
-                w(:,i)=w1(:,1);
+                w(:,i)=w1(:,i);
+                assert(~isnan(w1(:,i)));
             end
-        w = w/(sum(w));
         end
+        w = w/(sum(w));
     end
 end

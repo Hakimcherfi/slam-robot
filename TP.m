@@ -4,19 +4,18 @@ clc;
 
 %donnees
 plot_p = 0; %0 pour ne rien afficher, 1 pour voir la simulation/generation de donnees
-Part = 10; %nombre de particules
+Part = 1000; %nombre de particules
 xresamp = 0.33; %si SIR, taux de resampling entre 0 et 1 (0 : jamais, 1 : toujours), ne fixe pas directement le seuil
-b = 1; %mettre a 1 pour voir les particules !
+b = 0; %mettre a 1 pour voir les particules !
 algo = 0; %0 : SIR, autre : SIS
 
 %debut algo
 [N,T,Z,F,Hfull,mX0,PX0,Qw,Rv,Xreel] = simulationDonnees(plot_p);
-X = zeros(6,Part,N);
-W = zeros(1,Part,N);
-
+X = nan(6,Part,N);
+W = nan(1,Part,N);
 if algo == 0 %algo SIR
     %k=0 :
-    [x,w] = SIR(zeros(6,Part),zeros(1,Part),[],0,1); %[] : mesure vide, 0 : k, 1 : pas resamp. 
+    [x,w] = SIR(nan(6,Part),nan(1,Part),[],0,1); %[] : mesure vide, 0 : k, 1 : pas resamp. 
     X(:,:,1) = x;
     W(:,:,1) = w;
 
@@ -28,7 +27,7 @@ if algo == 0 %algo SIR
     end
 else %algo SIS
     %k=0 :
-    [x,w] = SIS(zeros(6,Part),zeros(1,Part),[],0); %[] : mesure vide, 0 : k 
+    [x,w] = SIS(nan(6,Part),nan(1,Part),[],0); %[] : mesure vide, 0 : k 
     X(:,:,1) = x;
     W(:,:,1) = w;
 
@@ -52,7 +51,7 @@ end
 Px = zeros(6,6,N); %covariance etat
 for k = 1:N
     for i = 1:Part
-        Px(:,:,k) = Px(:,:,k)+(X(:,i,k)-Ex(:,k))*(X(:,i,k)-Ex(:,k))';
+        Px(:,:,k) = Px(:,:,k)+(((X(:,i,k)-Ex(:,k))*(X(:,i,k)-Ex(:,k))')*W(1,i,k));
     end
 end
 
