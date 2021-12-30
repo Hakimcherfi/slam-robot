@@ -59,6 +59,7 @@ function [x,w] = SIS(x1,w1,z,k)
                 assert(~isnan(w1(:,i)));
             end
         end
+        assert(sum(w)~=0);
         w = w/(sum(w));
     end
 end
