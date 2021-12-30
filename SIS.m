@@ -27,8 +27,6 @@ function [x,w] = SIS(x1,w1,z,k)
     PX0 = diag([.1 .2 .2 .2 .2 .2]);
     Qw = diag([.05^2 .05^2 (1e-10)^2 (1e-10)^2 (1e-10)^2 (1e-10)^2]);
     Rv = diag([.1^2 .1^2 .1^2 .1^2]);
-    %Qw = diag([.1^2 .1^2 (1e-2)^2 (1e-2)^2 (1e-2)^2 (1e-2)^2]);
-    %Rv = diag([.1^2 .1^2 .1^2 .1^2])*10;
     
     F = blkdiag([cos(w*deltaT) -sin(w*deltaT) ; sin(w*deltaT) cos(w*deltaT)], eye(2), eye(2));
     H1=[-1 0 1 0 0 0 ; 0 -1 0 1 0 0];
